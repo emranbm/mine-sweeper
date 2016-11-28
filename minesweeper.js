@@ -104,6 +104,35 @@ function createElements() {
     let gridDiv = newDiv('grid');
     windowDiv.appendChild(gridDiv);
     //Grid panel - END
+
+    getGameXML((str) => {
+        var oParser = new DOMParser();
+        var oDOM = oParser.parseFromString(str, "text/xml");
+        let gameElement = oDOM.documentElement;
+        if (gameElement.id !== 'minesweeper') {
+            alert('Wrong data received from the server.');
+            return;
+        }
+
+        let game = {
+            id: gameElement.getAttribute('id'),
+            title: gameElement.getAttribute('title'),
+            defaultLevel: gameElement.getElementsByTagName('levels')[0].getAttribute('default'),
+            levels: []
+        };
+
+        for (let level of gameElement.getElementsByTagName('levels')[0].children) {
+            game.levels.push({
+                id: level.getAttribute('id'),
+                title: level.getAttribute('title'),
+                timer: level.getAttribute('timer') === "true" ? true : false,
+                rows: level.getElementsByTagName('rows')[0].innerHTML,
+                cols: level.getElementsByTagName('cols')[0].innerHTML,
+                mines: level.getElementsByTagName('mines')[0].innerHTML,
+                time: level.getElementsByTagName('time')[0].innerHTML
+            })
+        }
+    });
 }
 
 main();
