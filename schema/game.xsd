@@ -1,0 +1,32 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="game" type="gameType"/>
+
+    <xs:complexType name="gameType">
+        <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element type="levelsType" name="levels"/>
+        </xs:sequence>
+        <xs:attribute type="xs:integer" name="id"/>
+        <xs:attribute type="xs:string" name="title"/>
+    </xs:complexType>
+
+    <xs:complexType name="levelsType">
+        <xs:sequence minOccurs="1">
+            <xs:element type="levelType" name="level"/>
+        </xs:sequence>
+        <xs:attribute type="xs:integer" name="default"/>
+    </xs:complexType>
+
+    <xs:complexType name="levelType">
+        <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element type="xs:integer" name="rows"/>
+            <xs:element type="xs:integer" name="cols"/>
+            <xs:element type="xs:integer" name="mines"/>
+            <xs:element type="xs:integer" name="time"/>
+        </xs:sequence>
+        <xs:attribute type="xs:integer" name="id"/>
+        <xs:attribute type="xs:string" name="title"/>
+        <xs:attribute type="xs:boolean" name="timer"/>
+    </xs:complexType>
+
+</xs:schema>

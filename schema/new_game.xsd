@@ -1,0 +1,11 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="request">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:integer" name="rows"/>
+        <xs:element type="xs:integer" name="cols"/>
+        <xs:element type="xs:integer" name="mines"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

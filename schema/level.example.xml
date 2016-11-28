@@ -1,0 +1,17 @@
+<grid>
+    <row row="1">
+        <col col="1"/>
+        <col col="2" mine="true"/>
+        <col col="3"/>
+    </row>
+    <row row="2">
+        <col col="1"/>
+        <col col="2" mine="true"/>
+        <col col="3"/>
+    </row>
+    <row row="3">
+        <col col="1" mine="true"/>
+        <col col="2"/>
+        <col col="3"/>
+    </row>
+</grid>

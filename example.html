@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="css/minesweeper.css">
+</head>
+
+<body>
+
+
+<div class="modal" id="alert-modal">
+	<div class="modal-content">
+		<input id="name" class="field" placeholder="Enter your name">
+		<button>OK</button>
+	</div>
+</div>
+
+<div class="window">
+
+	<div class="title-bar">
+		<span id="game-title">Minesweeper Online - Beginner!</span>
+		<div>
+			<span class="btn" id="btn-minimize">&minus;</span>
+			<span class="btn" id="btn-close">&times;</span>
+		</div>
+	</div>
+
+	<div class="top">
+		<span class="counter">123</span>
+		<span class="smile" data-value="normal"></span>
+		<span class="counter">321</span>
+	</div>
+
+	<div class='grid'>
+
+		<span id='c1' class="active"></span>
+		<span id='c2' class="revealed" data-value="7"></span>
+		<span id='c3' class="active"></span>
+		<span id='c4' class="revealed"></span>
+		<span id='c5'></span>
+		<span id='c6'></span>
+		<span id='c7' class="active"></span>
+		<span id='c8'></span>
+		<span id='c9'></span>
+		<span id='c10' class="revealed" data-value="2"></span>
+		<span id='c11'></span>
+		<span id='c12' class="revealed"></span>
+		<span id='c13' class="revealed" data-value="6"></span>
+		<span id='c14'></span>
+		<span id='c15'></span>
+		<span id='c16'></span>
+		<span id='c17' class="revealed"></span>
+		<span id='c18' class="revealed"></span>
+		<span id='c19'></span>
+		<span id='c20'></span>
+		<span id='c21'></span>
+		<span id='c22'></span>
+		<span id='c23'></span>
+		<span id='c24'></span>
+		<span id='c25' class="revealed" data-value="1"></span>
+		<span id='c26' class="revealed"></span>
+		<span id='c27' class="revealed"></span>
+		<span id='c28' class="revealed"></span>
+		<span id='c29' class="revealed"></span>
+		<span id='c30'></span>
+		<span id='c31'></span>
+		<span id='c32'></span>
+		<span id='c33' class="revealed"></span>
+		<span id='c34' class="revealed"></span>
+		<span id='c35' class="revealed"></span>
+		<span id='c36'></span>
+		<span id='c37' class="revealed"></span>
+		<span id='c38' class="revealed"></span>
+		<span id='c39' class="revealed"></span>
+		<span id='c40'></span>
+		<span id='c41'></span>
+		<span id='c42' class="revealed" data-value="mine"></span>
+		<span id='c43'></span>
+		<span id='c44'></span>
+		<span id='c45'></span>
+		<span id='c46'></span>
+		<span id='c47'></span>
+		<span id='c48' class="revealed"></span>
+		<span id='c49' class="revealed"></span>
+		<span id='c50' class="revealed"></span>
+		<span id='c51' class="revealed" data-value="1"></span>
+		<span id='c52' class="revealed"></span>
+		<span id='c53' class="revealed"></span>
+		<span id='c54' class="revealed" data-value="1"></span>
+		<span id='c55' class="revealed" data-value="1"></span>
+		<span id='c56' class="revealed"></span>
+		<span id='c57' class="revealed"></span>
+		<span id='c58'></span>
+		<span id='c59'></span>
+		<span id='c60'></span>
+		<span id='c61'></span>
+		<span id='c62'></span>
+		<span id='c63' class="revealed" data-value="mine"></span>
+		<span id='c64'></span>
+		<span id='c65' class="revealed" data-value="2"></span>
+		<span id='c66'></span>
+		<span id='c67'></span>
+		<span id='c68'></span>
+		<span id='c69' class="revealed" data-value="3"></span>
+		<span id='c70'></span>
+		<span id='c71'></span>
+		<span id='c72'></span>
+		<span id='c73' class="revealed" data-value="2"></span>
+		<span id='c74'></span>
+		<span id='c75'></span>
+		<span id='c76'></span>
+		<span id='c77' class="revealed" data-value="1"></span>
+		<span id='c78'></span>
+		<span id='c79'></span>
+		<span id='c80'></span>
+		<span id='c81'></span>
+
+	</div>
+
+</div>
+
+
+<script src="https://rawgit.com/AUT-CEIT/ie/master/2016/fall/HW-3/js/lib.js"></script>
+<script src="minesweeper.js"></script>
+</body>
+</html>
