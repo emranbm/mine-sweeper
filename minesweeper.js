@@ -69,7 +69,7 @@ function createElements() {
     let titleBarDiv = newDiv('title-bar');
     windowDiv.appendChild(titleBarDiv);
 
-    let gameTitleSpn = newElement('span', '', 'game-title');
+    let gameTitleSpn = newElement('span', null, 'game-title');
     gameTitleSpn.innerHTML = 'Minesweeper Online - Beginner!';
     titleBarDiv.appendChild(gameTitleSpn);
 
@@ -82,6 +82,28 @@ function createElements() {
     let closeBtnSpn = newElement('span', 'btn', 'btn-close');
     titleChildDiv.appendChild(closeBtnSpn);
     //Title bar div - END
+
+    //Top panel div
+    let topDiv = newDiv('top');
+    windowDiv.appendChild(topDiv);
+
+    let counterSpn = newElement('span', 'counter');
+    counterSpn.innerHTML = '123';
+    topDiv.appendChild(counterSpn);
+
+    let smileSpn = newElement('span', 'smile');
+    smileSpn.setAttribute('data-value', 'normal');
+    topDiv.appendChild(smileSpn);
+
+    let counterSpn2 = newElement('span', 'counter');
+    counterSpn2.innerHTML = '321';
+    topDiv.appendChild(counterSpn2);
+    //Top panel div - END
+
+    //Grid panel
+    let gridDiv = newDiv('grid');
+    windowDiv.appendChild(gridDiv);
+    //Grid panel - END
 }
 
 main();
