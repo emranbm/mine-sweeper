@@ -34,13 +34,29 @@ function cellClick(event) {
     if (game.levels[level].timer) {
         if (cellClick.firstClick) {
             cellClick.firstClick = false;
-            startTimer();
+            startTimer(gameOver);
         }
     } else {
         let timerCounter = document.getElementById('timerCounter');
         timerCounter.innerHTML++;
     }
+
+    let cell = event.target;
+    if (cell.getAttribute('data-value') === 'mine')
+        gameOver();
     //TODO
+}
+
+/**
+ * Gets called when the timer is finished or a bomb has been clicked.
+ */
+function gameOver() {
+    //TODO
+    if (startTimer.timerId) {
+        clearTimeout(startTimer.timerId);
+        startTimer.timerId = undefined;
+    }
+    alert("Game Over!");
 }
 // Event listeners - END
 
@@ -249,9 +265,9 @@ function startTimer(endCallback) {
             if (endCallback)
                 endCallback();
         } else
-            setTimeout(t, 1000);
+            startTimer.timerId = setTimeout(t, 1000);
     };
-    setTimeout(t, 1000);
+    startTimer.timerId = setTimeout(t, 1000);
 };
 
 window.onload = main;
