@@ -133,7 +133,7 @@ function createElements() {
     let topDiv = newDiv('top');
     windowDiv.appendChild(topDiv);
 
-    let counterSpn = newElement('span', 'counter', 'flagCounter');
+    let counterSpn = newElement('span', 'counter', 'mineCounter');
     counterSpn.innerHTML = '123';
     topDiv.appendChild(counterSpn);
 
@@ -245,12 +245,15 @@ function newGame() {
     });
 
     // Reset to defaults
+    let gameLevel = game.levels[level];
     let timerCounter = document.getElementById('timerCounter');
-    if (game.levels[level].timer)
-        timerCounter.innerHTML = game.levels[level].time;
+    if (gameLevel.timer)
+        timerCounter.innerHTML = gameLevel.time;
     else
         timerCounter.innerHTML = 0;
     cellClick.firstClick = true;
+    let mineCounter = document.getElementById('mineCounter');
+    mineCounter.innerHTML = gameLevel.mines;
 }
 
 /**
