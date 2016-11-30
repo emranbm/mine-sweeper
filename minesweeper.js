@@ -7,6 +7,32 @@ function main() {
     });
 }
 
+// Event listeners
+/**
+ * The smile span click listener.
+ * @param event
+ */
+function smileClick(event) {
+    newGame();
+}
+
+/**
+ * Ok button in the alert modal click event.
+ * @param event
+ */
+function nameOkClick(event) {
+    //TODO
+}
+
+/**
+ * Event handler for the click event of each cell in the grid.
+ * @param event
+ */
+function cellClick(event) {
+    //TODO
+}
+// Event listeners - END
+
 /**
  * Creates html elements of the page
  */
@@ -51,6 +77,7 @@ function createElements() {
 
     let okBtn = newElement('button');
     okBtn.innerHTML = 'OK';
+    okBtn.onclick = nameOkClick;
     alertChildDiv.appendChild(okBtn);
     //Alert modal div - END
 
@@ -85,10 +112,8 @@ function createElements() {
 
     let smileSpn = newElement('span', 'smile');
     smileSpn.setAttribute('data-value', 'normal');
+    smileSpn.onclick = smileClick;
     topDiv.appendChild(smileSpn);
-    smileSpn.onclick = function (event) {
-        newGame();
-    };
 
     let counterSpn2 = newElement('span', 'counter');
     counterSpn2.innerHTML = '321';
@@ -183,6 +208,15 @@ function newGame() {
         let levelDOM = new DOMParser().parseFromString(xmlStr, "text/xml");
         let grid = getHtmlElement(levelDOM, loadXMLDoc("./schema/level-style.xsl"));
         document.getElementsByClassName('window')[0].appendChild(grid);
+
+        grid = document.getElementById('grid');
+
+        let i = 1;
+        for (let cell of grid.children) {
+            cell.setAttribute('id', 'c' + i++);
+            cell.onclick = cellClick;
+        }
+
     });
 }
 
