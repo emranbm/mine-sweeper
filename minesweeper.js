@@ -1,18 +1,7 @@
-// Test Funcs
-// See Inspect Element's Console Log Output
-
-// getGameXML();
-//
-// getNewGame(`
-//     <request>
-//     <rows>3</rows>
-//     <cols>3</cols>
-//     <mines>3</mines>
-//     </request>
-// `);
-
 function main() {
     createElements();
+
+    newGame();
 }
 
 /**
@@ -94,16 +83,14 @@ function createElements() {
     let smileSpn = newElement('span', 'smile');
     smileSpn.setAttribute('data-value', 'normal');
     topDiv.appendChild(smileSpn);
+    smileSpn.onclick = function () {
+        newGame();
+    };
 
     let counterSpn2 = newElement('span', 'counter');
     counterSpn2.innerHTML = '321';
     topDiv.appendChild(counterSpn2);
     //Top panel div - END
-
-    //Grid panel
-    let gridDiv = newDiv('grid');
-    windowDiv.appendChild(gridDiv);
-    //Grid panel - END
 
     getGameXML((str) => {
         var oParser = new DOMParser();
@@ -125,13 +112,63 @@ function createElements() {
             game.levels.push({
                 id: level.getAttribute('id'),
                 title: level.getAttribute('title'),
-                timer: level.getAttribute('timer') === "true" ? true : false,
+                timer: level.getAttribute('timer') === "true",
                 rows: level.getElementsByTagName('rows')[0].innerHTML,
                 cols: level.getElementsByTagName('cols')[0].innerHTML,
                 mines: level.getElementsByTagName('mines')[0].innerHTML,
                 time: level.getElementsByTagName('time')[0].innerHTML
             })
         }
+    });
+}
+
+function newGame() {
+    /**
+     * Loads an xml file.
+     * @param filename The path to the file
+     * @returns {Document} xml content.
+     */
+    function loadXMLDoc(filename) {
+        if (window.ActiveXObject) {
+            xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+        else {
+            xhttp = new XMLHttpRequest();
+        }
+        xhttp.open("GET", filename, false);
+        try {
+            xhttp.responseType = "msxml-document"
+        } catch (err) {
+        } // Helping IE11
+        xhttp.send("");
+        return xhttp.responseXML;
+    }
+
+    /**
+     * Transforms the xml to an html element using the given xsl.
+     * @param xml
+     * @param xsl
+     * @returns {*} The processed html element.
+     */
+    function getHtmlElement(xml, xsl) {
+        // code for IE
+        if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
+            return xml.transformNode(xsl);
+        }
+        // code for Chrome, Firefox, Opera, etc.
+        else if (document.implementation && document.implementation.createDocument) {
+            xsltProcessor = new XSLTProcessor();
+            xsltProcessor.importStylesheet(xsl);
+            return xsltProcessor.transformToFragment(xml, document);
+        }
+    }
+
+
+    getNewGame('<Request><rows>9</rows><cols>9</cols><mines>10</mines></Request>', (xmlStr) => {
+        let levelDOM = new DOMParser().parseFromString(xmlStr, "text/xml");
+        let grid = getHtmlElement(levelDOM, loadXMLDoc("./schema/level-style.xsl"));
+        grid.id = 'grid';
+        document.getElementsByClassName('window')[0].appendChild(grid);
     });
 }
 
