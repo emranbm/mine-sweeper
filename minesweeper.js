@@ -1,7 +1,10 @@
 function main() {
     createElements();
 
-    newGame();
+    getGame((game) => {
+        window.game = game;
+        newGame();
+    });
 }
 
 /**
@@ -83,8 +86,7 @@ function createElements() {
     let smileSpn = newElement('span', 'smile');
     smileSpn.setAttribute('data-value', 'normal');
     topDiv.appendChild(smileSpn);
-    smileSpn.onclick = function (aa) {
-        alert(aa);
+    smileSpn.onclick = function (event) {
         newGame();
     };
 
@@ -92,7 +94,13 @@ function createElements() {
     counterSpn2.innerHTML = '321';
     topDiv.appendChild(counterSpn2);
     //Top panel div - END
+}
 
+/**
+ *
+ * @param callback {Function} A callback to receive the game object.
+ */
+function getGame(callback) {
     getGameXML((str) => {
         var oParser = new DOMParser();
         var oDOM = oParser.parseFromString(str, "text/xml");
@@ -120,6 +128,8 @@ function createElements() {
                 time: level.getElementsByTagName('time')[0].innerHTML
             })
         }
+
+        callback(game);
     });
 }
 
@@ -165,7 +175,7 @@ function newGame() {
     }
 
 
-    getNewGame('<Request><rows>9</rows><cols>9</cols><mines>10</mines></Request>', (xmlStr) => {
+    getNewGame('<Request><rows>' + game.levels[0].rows + '</rows><cols>' + game.levels[0].cols + '</cols><mines>' + game.levels[0].mines + '</mines></Request>', (xmlStr) => {
         let lastGrid = document.getElementById('grid');
         console.log(lastGrid);
         if (lastGrid != null)
