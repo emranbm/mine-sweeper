@@ -83,7 +83,8 @@ function createElements() {
     let smileSpn = newElement('span', 'smile');
     smileSpn.setAttribute('data-value', 'normal');
     topDiv.appendChild(smileSpn);
-    smileSpn.onclick = function () {
+    smileSpn.onclick = function (aa) {
+        alert(aa);
         newGame();
     };
 
@@ -165,9 +166,12 @@ function newGame() {
 
 
     getNewGame('<Request><rows>9</rows><cols>9</cols><mines>10</mines></Request>', (xmlStr) => {
+        let lastGrid = document.getElementById('grid');
+        console.log(lastGrid);
+        if (lastGrid != null)
+            document.removeChild(lastGrid);
         let levelDOM = new DOMParser().parseFromString(xmlStr, "text/xml");
         let grid = getHtmlElement(levelDOM, loadXMLDoc("./schema/level-style.xsl"));
-        grid.id = 'grid';
         document.getElementsByClassName('window')[0].appendChild(grid);
     });
 }
