@@ -63,6 +63,7 @@ function cellMouseUp(event) {
 
 function cellRightClick(event) {
     //TODO
+    let cell = event.target;
 }
 
 /**
@@ -258,15 +259,17 @@ function newGame() {
         for (let cell of grid.children) {
             cell.setAttribute('id', 'c' + i++);
             cell.onmousedown = (event) => {
-                if (event.button === 1) {
+                if (event.button === 0) {
                     event.target.className += " active";
                     cellMouseDown(event);
                 } else
                     cellRightClick(event);
             };
             cell.onmouseup = (event) => {
-                cellMouseDown.lastDownCell.className = cellMouseDown.lastDownCell.className.replace(new RegExp("active| active|active "), "");
-                cellMouseUp(event);
+                if (event.button === 0) {
+                    cellMouseDown.lastDownCell.className = cellMouseDown.lastDownCell.className.replace(new RegExp("active| active|active "), "");
+                    cellMouseUp(event);
+                }
             };
             cell.onmouseout = (event)=> {
                 event.target.className = event.target.className.replace(new RegExp("active| active|active "), "");
