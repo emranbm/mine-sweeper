@@ -31,9 +31,14 @@ function nameOkClick(event) {
  * @param event
  */
 function cellClick(event) {
-    if (cellClick.firstClick) {
-        cellClick.firstClick = false;
-        startTimer();
+    if (game.levels[level].timer) {
+        if (cellClick.firstClick) {
+            cellClick.firstClick = false;
+            startTimer();
+        }
+    } else {
+        let timerCounter = document.getElementById('timerCounter');
+        timerCounter.innerHTML++;
     }
     //TODO
 }
@@ -225,7 +230,10 @@ function newGame() {
 
     // Reset to defaults
     let timerCounter = document.getElementById('timerCounter');
-    timerCounter.innerHTML = game.levels[level].time;
+    if (game.levels[level].timer)
+        timerCounter.innerHTML = game.levels[level].time;
+    else
+        timerCounter.innerHTML = 0;
     cellClick.firstClick = true;
 }
 
