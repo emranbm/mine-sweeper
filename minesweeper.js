@@ -1,10 +1,13 @@
 function main() {
+    window.level = 0;
+
     createElements();
 
     getGame((game) => {
         window.game = game;
         newGame();
     });
+
 }
 
 // Event listeners
@@ -15,7 +18,6 @@ function main() {
 function smileClick(event) {
     newGame();
 }
-
 /**
  * Ok button in the alert modal click event.
  * @param event
@@ -29,6 +31,10 @@ function nameOkClick(event) {
  * @param event
  */
 function cellClick(event) {
+    if (cellClick.firstClick) {
+        cellClick.firstClick = false;
+        startTimer();
+    }
     //TODO
 }
 // Event listeners - END
@@ -106,7 +112,7 @@ function createElements() {
     let topDiv = newDiv('top');
     windowDiv.appendChild(topDiv);
 
-    let counterSpn = newElement('span', 'counter');
+    let counterSpn = newElement('span', 'counter', 'flagCounter');
     counterSpn.innerHTML = '123';
     topDiv.appendChild(counterSpn);
 
@@ -115,7 +121,7 @@ function createElements() {
     smileSpn.onclick = smileClick;
     topDiv.appendChild(smileSpn);
 
-    let counterSpn2 = newElement('span', 'counter');
+    let counterSpn2 = newElement('span', 'counter', 'timerCounter');
     counterSpn2.innerHTML = '321';
     topDiv.appendChild(counterSpn2);
     //Top panel div - END
@@ -199,10 +205,8 @@ function newGame() {
         }
     }
 
-
-    getNewGame('<Request><rows>' + game.levels[0].rows + '</rows><cols>' + game.levels[0].cols + '</cols><mines>' + game.levels[0].mines + '</mines></Request>', (xmlStr) => {
+    getNewGame('<Request><rows>' + game.levels[level].rows + '</rows><cols>' + game.levels[level].cols + '</cols><mines>' + game.levels[level].mines + '</mines></Request>', (xmlStr) => {
         let lastGrid = document.getElementById('grid');
-        console.log(lastGrid);
         if (lastGrid != null)
             document.removeChild(lastGrid);
         let levelDOM = new DOMParser().parseFromString(xmlStr, "text/xml");
@@ -218,7 +222,29 @@ function newGame() {
         }
 
     });
+
+    // Reset to defaults
+    let timerCounter = document.getElementById('timerCounter');
+    timerCounter.innerHTML = game.levels[level].time;
+    cellClick.firstClick = true;
 }
 
-main();
+/**
+ * Starts the timer count down.
+ * @param endCallback {Function} {Optional} Is called when the timer reaches 0.
+ */
+function startTimer(endCallback) {
+    let timerCounter = document.getElementById('timerCounter');
+    let t = () => {
+        timerCounter.innerHTML = timerCounter.innerHTML - 1;
+        if (timerCounter.innerHTML <= 0) {
+            if (endCallback)
+                endCallback();
+        } else
+            setTimeout(t, 1000);
+    };
+    setTimeout(t, 1000);
+};
+
+window.onload = main;
 
