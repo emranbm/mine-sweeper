@@ -26,14 +26,33 @@ function nameOkClick(event) {
     //TODO
 }
 
+
 /**
- * Event handler for the click event of each cell in the grid.
+ * Event handler for the mouse down event of each cell in the grid.
  * @param event
  */
-function cellClick(event) {
+function cellMouseDown(event) {
+    let cell = event.target;
+    cellMouseDown.lastDownCell = cell;
+    cell.className = 'active';
+}
+
+/**
+ * Event handler for the mouse up event of each cell in the grid.
+ * @param event
+ */
+function cellMouseUp(event) {
+    let cell = event.target;
+
+    cellMouseDown.lastDownCell.className = cell.className.replace(new RegExp(" active|active |active"), "");
+
+    // Down somewhere and up somewhere else is not a click!
+    if (cellMouseDown.lastDownCell.id !== cell.id)
+        return;
+
     if (game.levels[level].timer) {
-        if (cellClick.firstClick) {
-            cellClick.firstClick = false;
+        if (cellMouseUp.firstClick) {
+            cellMouseUp.firstClick = false;
             startTimer(gameOver);
         }
     } else {
@@ -41,10 +60,8 @@ function cellClick(event) {
         timerCounter.innerHTML++;
     }
 
-    let cell = event.target;
     if (cell.getAttribute('data-value') === 'mine')
         gameOver();
-    //TODO
 }
 
 /**
@@ -239,7 +256,8 @@ function newGame() {
         let i = 1;
         for (let cell of grid.children) {
             cell.setAttribute('id', 'c' + i++);
-            cell.onclick = cellClick;
+            cell.onmousedown = cellMouseDown;
+            cell.onmouseup = cellMouseUp;
         }
 
     });
@@ -251,7 +269,7 @@ function newGame() {
         timerCounter.innerHTML = gameLevel.time;
     else
         timerCounter.innerHTML = 0;
-    cellClick.firstClick = true;
+    cellMouseUp.firstClick = true;
     let mineCounter = document.getElementById('mineCounter');
     mineCounter.innerHTML = gameLevel.mines;
 }
