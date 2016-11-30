@@ -6,10 +6,10 @@
                 <xsl:for-each select="./col">
                     <xsl:choose>
                         <xsl:when test="./@mine">
-                            <span data-value="mine"/>
+                            <span data-value="mine" oncontextmenu="return false;"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <span/>
+                            <span oncontextmenu="return false;"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:for-each>

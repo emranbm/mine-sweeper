@@ -34,7 +34,6 @@ function nameOkClick(event) {
 function cellMouseDown(event) {
     let cell = event.target;
     cellMouseDown.lastDownCell = cell;
-    cell.className = 'active';
 }
 
 /**
@@ -43,8 +42,6 @@ function cellMouseDown(event) {
  */
 function cellMouseUp(event) {
     let cell = event.target;
-
-    cellMouseDown.lastDownCell.className = cell.className.replace(new RegExp(" active|active |active"), "");
 
     // Down somewhere and up somewhere else is not a click!
     if (cellMouseDown.lastDownCell.id !== cell.id)
@@ -62,6 +59,10 @@ function cellMouseUp(event) {
 
     if (cell.getAttribute('data-value') === 'mine')
         gameOver();
+}
+
+function cellRightClick(event) {
+    //TODO
 }
 
 /**
@@ -256,8 +257,20 @@ function newGame() {
         let i = 1;
         for (let cell of grid.children) {
             cell.setAttribute('id', 'c' + i++);
-            cell.onmousedown = cellMouseDown;
-            cell.onmouseup = cellMouseUp;
+            cell.onmousedown = (event) => {
+                if (event.button === 1) {
+                    event.target.className += " active";
+                    cellMouseDown(event);
+                } else
+                    cellRightClick(event);
+            };
+            cell.onmouseup = (event) => {
+                cellMouseDown.lastDownCell.className = cellMouseDown.lastDownCell.className.replace(new RegExp("active| active|active "), "");
+                cellMouseUp(event);
+            };
+            cell.onmouseout = (event)=> {
+                event.target.className = event.target.className.replace(new RegExp("active| active|active "), "");
+            };
         }
 
     });
