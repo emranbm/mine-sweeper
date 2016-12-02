@@ -78,34 +78,21 @@ function cellMouseUp(event) {
         cell.className += 'revealed';
         gameOver();
     }
-    else if (hasClass(cell, 'revealed')) {
-        revealNeighbors(cell, true);
+    else if (hasClass(cell, 'revealed') && cell.hasAttribute('data-value')) {
+        let neighbors = getNeighbors(cell);
+        let flags = 0;
+
+        for (let neighb of neighbors)
+            if (hasClass(neighb, 'flag'))
+                flags++;
+
+        if (flags == cell.getAttribute('data-value'))
+            revealNeighbors(cell, true);
     } else {
         revealNeighbors(cell);
     }
 
     function revealNeighbors(cell, forceReveal) {
-        function getNeighbors(cell) {
-            let gameLevel = game.levels[level];
-
-            function getCell(x, y) {
-                return document.getElementById('c' + ((y - 1) * gameLevel.cols + x));
-            }
-
-            let index = cell.id.substr(1);
-            let loc = {
-                x: (index - 1) % gameLevel.cols + 1,
-                y: Math.floor(index / gameLevel.cols) + 1
-            };
-
-            let nCells = [];
-            for (let i = -1; i <= 1; i++)
-                for (let j = -1; j <= 1; j++)
-                    if (!(loc.x + i < 1 || loc.x + i > gameLevel.cols || loc.y + j < 1 || loc.y + j > gameLevel.rows))
-                        nCells.push(getCell(loc.x + i, loc.y + j));
-
-            return nCells;
-        }
 
         if (hasClass(cell, 'revealed') && !forceReveal)
             return;
@@ -124,6 +111,8 @@ function cellMouseUp(event) {
             cell.setAttribute('data-revealed', 1);
             for (let neighb of neighbors) {
                 if (neighb.getAttribute('data-value') === 'mine') {
+                    if (hasClass(neighb, 'flag'))
+                        continue;
                     neighb.className += ' revealed';
                     gameOver();
                     return;
@@ -360,7 +349,7 @@ function newGame() {
             cell.onmouseup = (event) => {
                 if (gameOver.isGameOver)
                     return;
-                
+
                 if (event.button === 0) {
                     removeClass(cellMouseDown.lastDownCell, 'active');
                     cellMouseUp(event);
@@ -405,7 +394,35 @@ function removeClass(element, className) {
  * @returns {boolean} True if the element has the given class. False otherwise.
  */
 function hasClass(element, className) {
+    // console.log(element.id + "###" + element.className + " has the class " + className + " ::: " + new RegExp(className).test(element.className));
     return new RegExp(className).test(element.className);
+}
+
+/**
+ * Returns all neighbors of the given cell.
+ * @param cell The cell element.
+ * @return {Array} Neighbors.
+ */
+function getNeighbors(cell) {
+    let gameLevel = game.levels[level];
+
+    function getCell(x, y) {
+        return document.getElementById('c' + ((y - 1) * gameLevel.cols + x));
+    }
+
+    let index = cell.id.substr(1);
+    let loc = {
+        x: (index - 1) % gameLevel.cols + 1,
+        y: Math.floor(index / gameLevel.cols) + 1
+    };
+
+    let nCells = [];
+    for (let i = -1; i <= 1; i++)
+        for (let j = -1; j <= 1; j++)
+            if (!(loc.x + i < 1 || loc.x + i > gameLevel.cols || loc.y + j < 1 || loc.y + j > gameLevel.rows || (i === j && i === 0)))
+                nCells.push(getCell(loc.x + i, loc.y + j));
+
+    return nCells;
 }
 
 /**
