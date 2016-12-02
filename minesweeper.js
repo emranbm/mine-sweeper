@@ -74,8 +74,10 @@ function cellMouseUp(event) {
         timerCounter.innerHTML++;
     }
 
-    if (cell.getAttribute('data-value') === 'mine')
+    if (cell.getAttribute('data-value') === 'mine'){
+        cell.className += 'revealed';
         gameOver();
+    }
     else {
         revealNeighbors(cell);
     }
