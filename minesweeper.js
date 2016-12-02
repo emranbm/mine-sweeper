@@ -64,6 +64,13 @@ function cellMouseUp(event) {
 function cellRightClick(event) {
     //TODO
     let cell = event.target;
+    if (cell.isFlaged) {
+        cell.isFlaged = false;
+        removeClass(cell, 'flag');
+    } else {
+        cell.isFlaged = true;
+        cell.className += " flag";
+    }
 }
 
 /**
@@ -260,19 +267,21 @@ function newGame() {
             cell.setAttribute('id', 'c' + i++);
             cell.onmousedown = (event) => {
                 if (event.button === 0) {
-                    event.target.className += " active";
-                    cellMouseDown(event);
+                    if (!event.target.isFlaged) {
+                        event.target.className += " active";
+                        cellMouseDown(event);
+                    }
                 } else
                     cellRightClick(event);
             };
             cell.onmouseup = (event) => {
                 if (event.button === 0) {
-                    cellMouseDown.lastDownCell.className = cellMouseDown.lastDownCell.className.replace(new RegExp("active| active|active "), "");
+                    removeClass(cellMouseDown.lastDownCell, 'active');
                     cellMouseUp(event);
                 }
             };
             cell.onmouseout = (event)=> {
-                event.target.className = event.target.className.replace(new RegExp("active| active|active "), "");
+                removeClass(event.target, 'active');
             };
         }
 
@@ -288,6 +297,15 @@ function newGame() {
     cellMouseUp.firstClick = true;
     let mineCounter = document.getElementById('mineCounter');
     mineCounter.innerHTML = gameLevel.mines;
+}
+
+/**
+ * Removes the given class from the element.
+ * @param element
+ * @param className
+ */
+function removeClass(element, className) {
+    element.className = element.className.replace(new RegExp(className + "| " + className + "|" + className + " "), "")
 }
 
 /**
