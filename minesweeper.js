@@ -31,7 +31,11 @@ function smileClick(event) {
  * @param event
  */
 function nameOkClick(event) {
-    //TODO
+    let nameET = document.getElementById('name');
+    if (/^[a-zA-Z]+$/.test(nameET.value)) {
+        document.getElementsByTagName('body')[0].removeChild(document.getElementById('alert-modal'));
+    } else
+        alert('Please just enter a-z characters.');
 }
 
 
@@ -124,7 +128,6 @@ function cellMouseUp(event) {
 }
 
 function cellRightClick(event) {
-    //TODO
     let cell = event.target;
     if (cell.isFlaged) {
         cell.isFlaged = false;
