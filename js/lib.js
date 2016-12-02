@@ -11,12 +11,12 @@
  */
 function getGameXML(cb) {
     // Simple Static Game Levels
-    let xml = `
+    var xml = `
         <game id="minesweeper" title="Minesweeper Online" >
             <levels default ="1">
                 <level id="1" title="Beginner!" timer="true">
-                    <rows>10</rows>
-                    <cols>10</cols>
+                    <rows>9</rows>
+                    <cols>9</cols>
                     <mines>5</mines>
                     <time>120</time>
                 </level>
@@ -39,24 +39,24 @@ window.getGameXML = getGameXML;
 function getNewGame(request, cb) {
 
     // Parse opts
-    let _request = new DOMParser().parseFromString(request, 'text/xml').childNodes[0];
-    let opts = ['rows', 'cols', 'mines'].reduce(function (p, c) {
+    var _request = new DOMParser().parseFromString(request, 'text/xml').childNodes[0];
+    var opts = ['rows', 'cols', 'mines'].reduce(function (p, c) {
         p[c] = parseInt(_request.getElementsByTagName(c)[0].innerHTML);
         return p;
     }, {});
 
     // Initialize empty game
     var game = [];
-    for (let r = 0; r < opts.rows; r++) {
-        let row = [];
-        for (let c = 0; c < opts.cols; c++)
+    for (var r = 0; r < opts.rows; r++) {
+        var row = [];
+        for (var c = 0; c < opts.cols; c++)
             row.push(undefined);
         game.push(row);
     }
 
     // Randomly place mines
-    for (let i = 0; i < opts.mines; i++) {
-        let x, y;
+    for (var i = 0; i < opts.mines; i++) {
+        var x, y;
         do {
             x = _rand(0, opts.cols - 1);
             y = _rand(0, opts.rows - 1);
@@ -65,10 +65,10 @@ function getNewGame(request, cb) {
     }
 
     // Make XML
-    let xml = '<grid>';
-    for (let r = 0; r < opts.rows; r++) {
+    var xml = '<grid>';
+    for (var r = 0; r < opts.rows; r++) {
         xml += `<row row="${r + 1}">`;
-        for (let c = 0; c < opts.cols; c++) {
+        for (var c = 0; c < opts.cols; c++) {
             xml += `<col col="${c + 1}" ${game[r][c]===true ? 'mine="true"' : ''} />`;
         }
         xml += '</row>';
