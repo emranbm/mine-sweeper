@@ -74,15 +74,17 @@ function cellMouseUp(event) {
         timerCounter.innerHTML++;
     }
 
-    if (cell.getAttribute('data-value') === 'mine'){
+    if (cell.getAttribute('data-value') === 'mine') {
         cell.className += 'revealed';
         gameOver();
     }
-    else {
+    else if (hasClass(cell, 'revealed')) {
+        revealNeighbors(cell, true);
+    } else {
         revealNeighbors(cell);
     }
 
-    function revealNeighbors(cell) {
+    function revealNeighbors(cell, forceReveal) {
         function getNeighbors(cell) {
             let gameLevel = game.levels[level];
 
@@ -105,9 +107,8 @@ function cellMouseUp(event) {
             return nCells;
         }
 
-        if (cell.hasAttribute('data-value') || hasClass(cell, 'revealed'))
+        if (hasClass(cell, 'revealed') && !forceReveal)
             return;
-
 
         let neighbors = getNeighbors(cell);
         let bombCount = 0;
@@ -117,12 +118,18 @@ function cellMouseUp(event) {
         }
 
         cell.className += " revealed";
-        if (bombCount > 0) {
+        if (bombCount > 0 && !forceReveal) {
             cell.setAttribute('data-value', bombCount);
         } else {
             cell.setAttribute('data-revealed', 1);
-            for (let neighb of neighbors)
-                revealNeighbors(neighb);
+            for (let neighb of neighbors) {
+                if (neighb.getAttribute('data-value') === 'mine') {
+                    neighb.className += ' revealed';
+                    gameOver();
+                    return;
+                } else
+                    revealNeighbors(neighb);
+            }
         }
     }
 
@@ -146,6 +153,7 @@ function cellRightClick(event) {
  * Gets called when the timer is finished or a bomb has been clicked.
  */
 function gameOver() {
+    gameOver.isGameOver = true;
     if (startTimer.timerId) {
         clearTimeout(startTimer.timerId);
         startTimer.timerId = undefined;
@@ -338,6 +346,9 @@ function newGame() {
         for (let cell of grid.children) {
             cell.setAttribute('id', 'c' + i++);
             cell.onmousedown = (event) => {
+                if (gameOver.isGameOver)
+                    return;
+
                 if (event.button === 0) {
                     if (!event.target.isFlaged) {
                         event.target.className += " active";
@@ -347,6 +358,9 @@ function newGame() {
                     cellRightClick(event);
             };
             cell.onmouseup = (event) => {
+                if (gameOver.isGameOver)
+                    return;
+                
                 if (event.button === 0) {
                     removeClass(cellMouseDown.lastDownCell, 'active');
                     cellMouseUp(event);
@@ -372,6 +386,7 @@ function newGame() {
     let mineCounter = document.getElementById('mineCounter');
     mineCounter.innerHTML = gameLevel.mines;
     document.getElementById('smiley').setAttribute('data-value', 'normal');
+    gameOver.isGameOver = false;
 }
 
 /**
