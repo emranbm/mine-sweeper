@@ -47,6 +47,11 @@ function cellMouseUp(event) {
     if (cellMouseDown.lastDownCell.id !== cell.id)
         return;
 
+    if (cellMouseUp.firstClick) {
+        let smiley = document.getElementById('smiley');
+        smiley.setAttribute('data-value', 'ok');
+    }
+
     if (game.levels[level].timer) {
         if (cellMouseUp.firstClick) {
             cellMouseUp.firstClick = false;
@@ -128,12 +133,15 @@ function cellRightClick(event) {
  * Gets called when the timer is finished or a bomb has been clicked.
  */
 function gameOver() {
-    //TODO
     if (startTimer.timerId) {
         clearTimeout(startTimer.timerId);
         startTimer.timerId = undefined;
     }
-    alert("Game Over!");
+    let smiley = document.getElementById('smiley');
+    smiley.setAttribute('data-value', 'hover');
+    setTimeout(()=> {
+        alert("Game Over!");
+    }, 0);
 }
 // Event listeners - END
 
@@ -214,7 +222,7 @@ function createElements() {
     counterSpn.innerHTML = '123';
     topDiv.appendChild(counterSpn);
 
-    let smileSpn = newElement('span', 'smile');
+    let smileSpn = newElement('span', 'smile', 'smiley');
     smileSpn.setAttribute('data-value', 'normal');
     smileSpn.onclick = smileClick;
     topDiv.appendChild(smileSpn);
@@ -306,7 +314,7 @@ function newGame() {
     getNewGame('<Request><rows>' + game.levels[level].rows + '</rows><cols>' + game.levels[level].cols + '</cols><mines>' + game.levels[level].mines + '</mines></Request>', (xmlStr) => {
         let lastGrid = document.getElementById('grid');
         if (lastGrid != null)
-            document.removeChild(lastGrid);
+            document.getElementsByClassName('window')[0].removeChild(lastGrid);
         let levelDOM = new DOMParser().parseFromString(xmlStr, "text/xml");
         let grid = getHtmlElement(levelDOM, loadXMLDoc("./schema/level-style.xsl"));
         document.getElementsByClassName('window')[0].appendChild(grid);
@@ -348,6 +356,7 @@ function newGame() {
     cellMouseUp.firstClick = true;
     let mineCounter = document.getElementById('mineCounter');
     mineCounter.innerHTML = gameLevel.mines;
+    document.getElementById('smiley').setAttribute('data-value', 'normal');
 }
 
 /**
