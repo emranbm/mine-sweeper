@@ -59,6 +59,55 @@ function cellMouseUp(event) {
 
     if (cell.getAttribute('data-value') === 'mine')
         gameOver();
+    else {
+        revealNeighbors(cell);
+    }
+
+    function revealNeighbors(cell) {
+        function getNeighbors(cell) {
+            let gameLevel = game.levels[level];
+
+            function getCell(x, y) {
+                return document.getElementById('c' + ((y - 1) * gameLevel.cols + x));
+            }
+
+            let index = cell.id.substr(1);
+            let loc = {
+                x: (index - 1) % gameLevel.cols + 1,
+                y: Math.floor(index / gameLevel.cols) + 1
+            };
+
+            let nCells = [];
+            for (let i = -1; i <= 1; i++)
+                for (let j = -1; j <= 1; j++)
+                    if (!(loc.x + i < 1 || loc.x + i > gameLevel.cols || loc.y + j < 1 || loc.y + j > gameLevel.rows))
+                        nCells.push(getCell(loc.x + i, loc.y + j));
+
+            return nCells;
+        }
+
+        if (cell.hasAttribute('data-value') || hasClass(cell, 'revealed'))
+            return;
+
+
+        let neighbors = getNeighbors(cell);
+        let bombCount = 0;
+        for (let neighb of neighbors) {
+            if (neighb.getAttribute('data-value') === 'mine')
+                bombCount++;
+        }
+
+        cell.className += " revealed";
+        if (bombCount > 0) {
+            cell.setAttribute('data-value', bombCount);
+        } else {
+            cell.setAttribute('data-revealed', 1);
+            for (let neighb of neighbors)
+                revealNeighbors(neighb);
+        }
+    }
+
+    revealNeighbors(cell);
 }
 
 function cellRightClick(event) {
@@ -67,11 +116,11 @@ function cellRightClick(event) {
     if (cell.isFlaged) {
         cell.isFlaged = false;
         removeClass(cell, 'flag');
-        document.getElementById('mineCounter').innerHTML ++;
+        document.getElementById('mineCounter').innerHTML++;
     } else {
         cell.isFlaged = true;
         cell.className += " flag";
-        document.getElementById('mineCounter').innerHTML --;
+        document.getElementById('mineCounter').innerHTML--;
     }
 }
 
@@ -308,6 +357,16 @@ function newGame() {
  */
 function removeClass(element, className) {
     element.className = element.className.replace(new RegExp(className + "| " + className + "|" + className + " "), "")
+}
+
+/**
+ * Determines whether an element has a particular class or not.
+ * @param element
+ * @param className
+ * @returns {boolean} True if the element has the given class. False otherwise.
+ */
+function hasClass(element, className) {
+    return new RegExp(className).test(element.className);
 }
 
 /**
