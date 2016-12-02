@@ -55,6 +55,9 @@ function cellMouseDown(event) {
 function cellMouseUp(event) {
     let cell = event.target;
 
+    if (!cellMouseDown.lastDownCell)
+        return;
+
     // Down somewhere and up somewhere else is not a click!
     if (cellMouseDown.lastDownCell.id !== cell.id)
         return;
@@ -104,6 +107,8 @@ function cellMouseUp(event) {
                 bombCount++;
         }
 
+        if (!hasClass(cell, 'revealed'))
+            revealedCount++;
         cell.className += " revealed";
         if (bombCount > 0 && !forceReveal) {
             cell.setAttribute('data-value', bombCount);
@@ -113,6 +118,8 @@ function cellMouseUp(event) {
                 if (neighb.getAttribute('data-value') === 'mine') {
                     if (hasClass(neighb, 'flag'))
                         continue;
+                    if (!hasClass(neighb, 'revealed'))
+                        revealedCount++;
                     neighb.className += ' revealed';
                     gameOver();
                     return;
@@ -123,19 +130,24 @@ function cellMouseUp(event) {
     }
 
     revealNeighbors(cell);
+
+    checkWin();
 }
 
 function cellRightClick(event) {
     let cell = event.target;
+    let mineCounter = document.getElementById('mineCounter');
     if (cell.isFlaged) {
         cell.isFlaged = false;
         removeClass(cell, 'flag');
-        document.getElementById('mineCounter').innerHTML++;
+        mineCounter.innerHTML++;
     } else {
         cell.isFlaged = true;
         cell.className += " flag";
-        document.getElementById('mineCounter').innerHTML--;
+        mineCounter.innerHTML--;
     }
+
+    checkWin();
 }
 
 /**
@@ -151,6 +163,18 @@ function gameOver() {
     smiley.setAttribute('data-value', 'hover');
     setTimeout(()=> {
         alert("Game Over!");
+    }, 0);
+}
+
+/**
+ * Gets called when the player wins.
+ */
+function win() {
+    document.getElementById('smiley').setAttribute('data-value', 'win');
+    clearTimeout(startTimer.timerId);
+    gameOver.isGameOver = true;
+    setTimeout(() => {
+        alert('You win!');
     }, 0);
 }
 // Event listeners - END
@@ -351,7 +375,8 @@ function newGame() {
                     return;
 
                 if (event.button === 0) {
-                    removeClass(cellMouseDown.lastDownCell, 'active');
+                    if (cellMouseDown.lastDownCell)
+                        removeClass(cellMouseDown.lastDownCell, 'active');
                     cellMouseUp(event);
                 }
             };
@@ -376,6 +401,7 @@ function newGame() {
     mineCounter.innerHTML = gameLevel.mines;
     document.getElementById('smiley').setAttribute('data-value', 'normal');
     gameOver.isGameOver = false;
+    window.revealedCount = 0;
 }
 
 /**
@@ -423,6 +449,17 @@ function getNeighbors(cell) {
                 nCells.push(getCell(loc.x + i, loc.y + j));
 
     return nCells;
+}
+
+/**
+ * Checks if the player has win and call the win method if yes.
+ */
+function checkWin() {
+    let mineCounter = document.getElementById('mineCounter');
+
+    let gameLevel = game.levels[level];
+    if ((mineCounter.innerHTML == 0) && ((revealedCount * 1 + gameLevel.mines * 1) === (gameLevel.rows * gameLevel.cols)))
+        win();
 }
 
 /**
