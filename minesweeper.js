@@ -16,6 +16,14 @@ function main() {
  * @param event
  */
 function smileClick(event) {
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    let l = 'dasd';
+    while (!isNumeric(l))
+        l = prompt("Please enter the level:", '0');
+    level = l;
     newGame();
 }
 /**
@@ -349,6 +357,8 @@ function newGame() {
     // Reset to defaults
     let gameLevel = game.levels[level];
     let timerCounter = document.getElementById('timerCounter');
+    if (startTimer.timerId)
+        clearTimeout(startTimer.timerId);
     if (gameLevel.timer)
         timerCounter.innerHTML = gameLevel.time;
     else
