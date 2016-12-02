@@ -67,9 +67,11 @@ function cellRightClick(event) {
     if (cell.isFlaged) {
         cell.isFlaged = false;
         removeClass(cell, 'flag');
+        document.getElementById('mineCounter').innerHTML ++;
     } else {
         cell.isFlaged = true;
         cell.className += " flag";
+        document.getElementById('mineCounter').innerHTML --;
     }
 }
 
