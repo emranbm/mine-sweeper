@@ -7,7 +7,7 @@
 /**
  * Make game.xml
  * @param {Function} [cb] - cb(xmlStr)
- * @return {String} game.xsd xml {@link https://rawgit.com/AUT-CEIT/ie/master/2016/fall/HW-3/schema/game.xsd}
+ * @return {String} game.xsd xml {@link https://cdn.jsdelivr.net/gh/AUT-CEIT/ie/2016/fall/HW-3/schema/game.xsd}
  */
 function getGameXML(cb) {
     // Simple Static Game Levels
@@ -32,9 +32,9 @@ window.getGameXML = getGameXML;
 
 /**
  * Make level.xml
- * @param {String} request {@link https://rawgit.com/AUT-CEIT/ie/master/2016/fall/HW-3/schema/new_game.xsd}
+ * @param {String} request {@link https://cdn.jsdelivr.net/gh/AUT-CEIT/ie/2016/fall/HW-3/schema/new_game.xsd}
  * @param {Function} [cb] - cb(xmlStr)
- * @return {String} level.xsd xml {@link https://rawgit.com/AUT-CEIT/ie/master/2016/fall/HW-3/schema/level.xsd}
+ * @return {String} level.xsd xml {@link https://cdn.jsdelivr.net/gh/AUT-CEIT/ie/2016/fall/HW-3/schema/level.xsd}
  */
 function getNewGame(request, cb) {
 
